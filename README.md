@@ -17,7 +17,7 @@ Some results here:
 We can see that on *average* DFS uses fewer iterations, although this is a small sample size. It will depend a lot on how many different routes the specific carrier has.
 
 ### 1.2
-Our dijkstra is implemented with the default Java PriorityQueue. Since it does not have function to update priority for an element (which is necessary in dijkstra), we remove the element and re-insert it. This however is an O(n) operation, that could have been O(logn) with a proper PriorityQueue. 
+Our dijkstra is implemented with the default Java PriorityQueue. Since it does not have function to update priority for an element (which is necessary in dijkstra), we remove the element and re-insert it. This however is an O(n) operation, that could have been O(logn) with a proper PriorityQueue. This comes at the cost of slightly slower iteration through all vertices - an 
 
 ### 1.3 
 For this we have reused our dijkstra implementation with a small addition to count the extra hours from layovers. Given the pseudocode below: 
@@ -49,6 +49,10 @@ For this we have reused our dijkstra implementation with a small addition to cou
 we simply insert after line 17: ``if (!neighbor.getCode().equals(endNode)) { alt +=1;}`` 
 
 ### 1.4 
-This task made no real sense, or at least with the explanation provided it didn't. We have implemented Prim's algorithm and attempted to run it for all airports/airlines, just to generate a spanning tree. However it did not seem possible with the full data set - we have run the algorithm on a separate fictionary subset of the graph, which can be found in /doc/airlines/ (airports2.txt and routes2.txt make up the small fictionary graph). Our Prim implementation worked fine on this data,  which leads us to believe that the full graph is somehow disconnected. We did not want to sort through it all and figure out where it was disconnected, but it seems to stop after ~3400 airports out of ~5600 total.
+This task made no real sense, or at least with the explanation provided it didn't. We have implemented Prim's algorithm and attempted to run it for all airports/airlines, just to generate a minimum spanning tree. However it did not seem possible with the full data set - we have run the algorithm on a separate fictionary subset of the graph, which can be found in /doc/airlines/ (airports2.txt and routes2.txt make up the small fictionary graph). Our Prim implementation worked fine on this data,  which leads us to believe that the full graph is somehow disconnected. We did not want to sort through it all and figure out where it was disconnected, but it seems to stop after ~3400 airports out of ~5600 total.
 
+### 1.5
+We have chosen to implement our graph as a java HashMap<String, Vertex>, where the string is the airport code. We then let our Vertex(airports) class keep a list of all its edges (routes). This reason for the map was mainly because the airports are uniquely identified by their airport code, and thus the HashMap allows O(1) complexity get() operations which is sometimes nifty. However, iterating through entries in a hashmap is slightly slower, and also it takes up a bit of extra memory because of storing the key as well as the value, compared to just the value (in an arraylist) 
+
+For the dijkstra, as mentioned above our solution is not optimal, since our prio queue updates happen in O(n) time instead of O(logn). 
 
